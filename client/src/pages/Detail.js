@@ -9,6 +9,7 @@ import {
   UPDATE_PRODUCTS, 
 } from "../utils/actions";
 import { QUERY_PRODUCTS } from "../utils/queries";
+import { idbPromise } from "../utils/helpers";
 import Cart from '../components/Cart';
 import spinner from '../assets/spinner.gif'
 
@@ -23,15 +24,32 @@ function Detail() {
   const { products, cart } = state;
 
   useEffect(() => {
+    // already in global store
     if (products.length) {
       setCurrentProduct(products.find(product => product._id === id));
+      // retrieved from server
     } else if (data) {
       dispatch({
         type: UPDATE_PRODUCTS,
         products: data.products
-      })
+      });
+
+      data.products.forEach((product) => {
+        idbPromise('products', 'put', product);
+      });
     }
-  }, [products, data, dispatch, id]);
+     // get cache from idb
+    else if (!loading) {
+      // since we're offline, get all of the data from the `products` store
+      idbPromise('products', 'get').then((indexedProducts) => {
+        // use retrieved data to set global state for offline browsing
+        dispatch({
+          type: UPDATE_PRODUCTS,
+          products: indexedProducts
+        });
+      });
+    }
+  }, [products, data, loading, dispatch, id]);
 
   const addToCart = () => {
     const itemInCart = cart.find((cartItem) => cartItem._id === id);
