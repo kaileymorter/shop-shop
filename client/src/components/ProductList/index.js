@@ -19,7 +19,7 @@ function ProductList() {
       //execute our dispatch function with our action object indicating the type of actioon and the data to set our state for categories to
       dispatch({
         type: UPDATE_PRODUCTS,
-        categories: data.products
+        products: data.products
       });
     }
   }, [data, dispatch]);
@@ -34,7 +34,7 @@ function ProductList() {
   return (
     <div className="my-2">
       <h2>Our Products:</h2>
-      {products.length ? (
+      {state.products.length ? (
         <div className="flex-row">
             {filterProducts().map(product => (
                 <ProductItem
