@@ -2,8 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from '@apollo/react-hooks';
 import { useStoreContext } from "../utils/GlobalState";
-import { UPDATE_PRODUCTS } from "../utils/actions";
+import {   
+  REMOVE_FROM_CART,
+  UPDATE_CART_QUANTITY,
+  ADD_TO_CART,
+  UPDATE_PRODUCTS, 
+} from "../utils/actions";
 import { QUERY_PRODUCTS } from "../utils/queries";
+import Cart from '../components/Cart';
 import spinner from '../assets/spinner.gif'
 
 function Detail() {
@@ -27,6 +33,13 @@ function Detail() {
     }
   }, [products, data, dispatch, id]);
 
+  const addToCart = () => {
+    dispatch({
+      type: ADD_TO_CART,
+      product: { ...currentProduct, purchaseQuantity: 1 }
+    });
+  };
+
   return (
     <>
       {currentProduct ? (
@@ -45,7 +58,7 @@ function Detail() {
             <strong>Price:</strong>
             ${currentProduct.price}
             {" "}
-            <button>
+            <button onClick={addToCart}>
               Add to Cart
             </button>
             <button>
@@ -62,6 +75,7 @@ function Detail() {
       {
         loading ? <img src={spinner} alt="loading" /> : null
       }
+    <Cart />
     </>
   );
 };
