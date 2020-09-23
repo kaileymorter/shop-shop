@@ -1,9 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { pluralize } from "../../utils/helpers"
-import { useStoreContext } from '../../utils/GlobalState';
+// import { useStoreContext } from '../../utils/GlobalState';
 import { ADD_TO_CART, UPDATE_CART_QUANTITY } from '../../utils/actions';
 import { idbPromise } from "../../utils/helpers";
+import { useSelector, useDispatch } from 'react-redux';
 
 function ProductItem(item) {
   const {
@@ -14,10 +15,14 @@ function ProductItem(item) {
     quantity
   } = item;
 
-  const [state, dispatch] = useStoreContext();
+  // const [state, dispatch] = useStoreContext();
+  
+  const state = useSelector(state => state)
+  const dispatch = useDispatch()
 
   const { cart } = state;
 
+  //function to that dispatches an action to add an item to the cart and if the item in cart already exists, update the quantity of that item to reflect the change
   const addToCart = () => {
     const itemInCart = cart.find((cartItem) => cartItem._id === _id)
     if (itemInCart) {
