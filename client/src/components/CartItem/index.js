@@ -1,11 +1,14 @@
 import React from 'react';
-import { useStoreContext } from '../../utils/GlobalState';
+// import { useStoreContext } from '../../utils/GlobalState';
 import { REMOVE_FROM_CART, UPDATE_CART_QUANTITY } from '../../utils/actions';
 import { idbPromise } from "../../utils/helpers";
+import { useDispatch } from 'react-redux';
 
 const CartItem = ({ item }) => {
-    const [, dispatch] = useStoreContext();
+    // const [, dispatch] = useStoreContext();
+    const dispatch = useDispatch()
 
+    //function that dispatches to an action to remove an item from the cart and then update the state of the cart
     const removeFromCart = item => {
         dispatch({
             type: REMOVE_FROM_CART, 
@@ -14,6 +17,7 @@ const CartItem = ({ item }) => {
         idbPromise('cart', 'delete', { ...item });
     }
 
+    //function to that dispatch to an action to update the quantity of an item in a cart. If the state of the item in the cart is 0, it will remove it completely.
     const onChange = (e) => {
         const value = e.target.value;
 
