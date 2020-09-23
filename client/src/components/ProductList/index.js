@@ -2,18 +2,23 @@ import React, { useEffect } from "react";
 import { useQuery } from '@apollo/react-hooks';
 import ProductItem from "../ProductItem";
 import { QUERY_PRODUCTS } from "../../utils/queries";
-import { useStoreContext } from '../../utils/GlobalState';
+// import { useStoreContext } from '../../utils/GlobalState';
 import { UPDATE_PRODUCTS } from '../../utils/actions';
 import spinner from "../../assets/spinner.gif"
 import { idbPromise } from "../../utils/helpers";
+import { useSelector, useDispatch } from 'react-redux';
+
 
 function ProductList() {
-  const [state, dispatch] = useStoreContext();
+  // const [state, dispatch] = useStoreContext();
+  const state = useSelector(state => state);
+  const dispatch = useDispatch()
 
   const { currentCategory } = state;
 
   const { loading, data } = useQuery(QUERY_PRODUCTS);
 
+  //useEffect function that dispatches and action to update the product list 
   useEffect(() => {
     if(data) {
       dispatch({
@@ -37,6 +42,7 @@ function ProductList() {
     }
   }, [data, loading, dispatch]);
 
+  //function to return the states products if there is no currentCategory and if there is a product selected, filter through them to show the product selected
   function filterProducts(){
     if(!currentCategory) {
       return state.products;
