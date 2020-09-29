@@ -2,7 +2,6 @@
 
 ## Description
 
-A MERN stack application that uses Google Books API and allows a user to login, search books and save favorites.
 A MERN stack application that uses the Redux to manage the applications state. Shop-Shop is an e-commerce site that uses Stripe to complete payments.
 
 **[Deployed Application](https://enigmatic-dawn-62849.herokuapp.com/)**
